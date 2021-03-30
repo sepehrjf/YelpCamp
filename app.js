@@ -63,6 +63,10 @@ passport.deserializeUser(User.deserializeUser());
 
 //a middleware that always has access, global middlewares
 app.use((req, res, next) => {
+    //if any routes other than login or homepage
+    if (!['/login', ['/'].includes(req.originalUrl)]) {
+        req.session.returnTo = req.originalUrl;
+    }
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
